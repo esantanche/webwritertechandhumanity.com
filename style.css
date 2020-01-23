@@ -1,0 +1,607 @@
+
+/*z-index    Used for   */
+/*10         Carpet, item-image*/
+/*20         Avatar*/
+/*30         ItemDialogBackMask*/
+/*35         ArrowsAndItemOrderNumbers, MenuButtonContainer*/
+/*40         ItemDialog, ContactMeView*/
+/*50         Menu*/
+
+::-webkit-scrollbar {
+    height: 0px;
+}
+
+body {
+    /*overflow: auto;*/
+    background: #3CBCB3;
+    margin: 0;
+    height: 100%;
+}
+
+h1 {
+    font-size: 1.33em
+}
+
+h2 {
+    font-size: 1em
+}
+
+p, li {
+    font-size: 0.9em
+}
+
+@media (min-width: 600px) {
+
+    h1 {
+        font-size: 2em
+    }
+
+    h2 {
+        font-size: 1.5em
+    }
+
+    p, li {
+        font-size: 1.2em
+    }
+
+}
+
+/* Containers */
+
+.img-container {
+    text-align: center;
+}
+
+/* ItemContentView */
+
+#ItemDialog {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+    width: 90vw;
+    margin-left: 5vw;
+    height: 90%;
+    margin-top: 5vh;
+    background-color: white;
+    z-index: 40;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+@media (min-width: 600px) {
+
+    #ItemDialog {
+        display: none;
+        position: fixed;
+        flex-direction: column;
+        align-content: center;
+        justify-content: flex-start;
+        width: 50vw;
+        margin-left: 25vw;
+        height: 70vh;
+        margin-top: 15vh;
+        background-color: white;
+        z-index: 40;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+
+}
+
+#BackMask {
+    display: none;
+    position: fixed;
+    width: 100vw;
+    height: 100%;
+    z-index: 30;
+    background-color: black;
+    opacity: 0.5;
+}
+
+#ContentPane {
+    padding-right: 30px;
+    padding-left: 30px;
+    overflow-y: auto;
+}
+
+@media (min-width: 600px) {
+
+    #ContentPane {
+        overflow-y: hidden;
+    }
+
+    #ContentPane:hover {
+        overflow-y: auto;
+    }
+
+    /*To show scrollbar in Chrome*/
+    ::-webkit-scrollbar {
+        -webkit-appearance: none;
+        width: 7px;
+    }
+    ::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background-color: rgba(0,0,0,.5);
+        -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+    }
+
+}
+
+#CloseDialogButton {
+    align-self: flex-end;
+    padding-top: 10px;
+    padding-right: 10px;
+    font-size: 36px;
+    color: #222222;
+}
+
+#CloseDialogButton:hover {
+    cursor: pointer;
+}
+
+/* MapView */
+
+/* position fixed is essential to avoid scrolling on mobile */
+
+#MapImage {
+    display: none;
+    height: 7000px;
+    width: 7000px;
+    position: fixed;
+    top: calc(-3500px + 50vh);
+    left: calc(-3500px + 50vw);
+    background: #007991;
+    background: -webkit-linear-gradient(to right, #78ffd6, #007991);
+    background: linear-gradient(to right, #78ffd6, #007991);
+}
+
+/* HomeMessageView */
+
+#HomeMessageView {
+    width: 90vw;
+    margin-top: 10vh;
+}
+
+@media (min-width: 600px) {
+
+    #HomeMessageView {
+        width: 60vw;
+    }
+
+}
+
+@media (min-width: 960px) {
+
+    #HomeMessageView {
+        width: 50vw;
+    }
+
+}
+
+.paper-sheet {
+    padding: 20px;
+    box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.8);
+    background-color: white;
+}
+
+@media (min-width: 600px) {
+
+    .paper-sheet {
+        padding: 50px;
+    }
+
+}
+
+/* Carpet */
+
+/* Now there is the carpet and the two arrows. This means that
+   we have 256px for the carpet and 180+180 for the arrows. Total 616.
+   Half of 616 is 308. */
+
+#Carpet {
+    display: none;
+    position: absolute;
+    top: calc(50vh - 60px);
+    left: calc(50vw - 83px);
+    z-index: 10;
+}
+
+.carpet-image {
+    width: 167px;
+    height: 120px;
+}
+
+@media (min-width: 600px) {
+
+    #Carpet {
+        display: none;
+        position: absolute;
+        top: calc(50vh - 90px);
+        left: calc(50vw - 128px);
+        z-index: 10;
+        -webkit-filter: drop-shadow(5px 5px 5px #222 );
+        filter: drop-shadow(5px 5px 5px #222);
+    }
+
+    .carpet-image {
+        width: 256px;
+        height: 181px;
+    }
+
+}
+
+/* Avatar */
+
+#Avatar {
+    display: none;
+    position: absolute;
+    top: calc(50vh - 30px);
+    left: calc(50vw - 30px);
+    z-index: 20;
+    -webkit-filter: drop-shadow(5px 5px 5px #222 );
+    filter: drop-shadow(5px 5px 5px #222);
+}
+
+/* Arrows and item order number */
+
+.arrows-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#ArrowsAndItemOrderNumbers {
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 1vh;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 35;
+}
+
+.arrow {
+    width: 100px;
+    -webkit-filter: drop-shadow(5px 5px 5px #222 );
+    filter: drop-shadow(5px 5px 5px #222);
+    cursor: pointer;
+}
+
+.blinking {
+    -webkit-animation: blink 3s infinite;
+    -moz-animation: blink 3s infinite;
+    animation: blink 3s infinite;
+}
+
+@-webkit-keyframes blink {
+
+    0% { opacity:0.3; }
+    50% { opacity: 1; }
+    100% { opacity:0.3; }
+}
+
+@-moz-keyframes blink {
+
+    0% { opacity:0.3; }
+    50% { opacity: 1; }
+    100% { opacity:0.3; }
+}
+
+@keyframes blink {
+
+    0% { opacity:0.3; }
+    50% { opacity: 1; }
+    100% { opacity:0.3; }
+
+}
+
+/* Menu buttons */
+
+#MenuButtonContainer {
+    display: none;
+    position: absolute;
+    top: 5vh;
+    right: 5vw;
+    z-index: 35;
+}
+
+#MenuButton {
+    cursor: pointer;
+}
+
+/* Menu */
+
+#Menu {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+    width: 100vw;
+    height: 100%;
+    background-color: #004b79;
+    opacity: 0.9;
+    z-index: 50;
+}
+
+#MenuPane {
+    padding-right: 10vw;
+    padding-left: 10vw;
+    overflow-y: scroll;
+    margin-bottom: 5vh;
+}
+
+@media (min-width: 600px) {
+
+    #MenuPane {
+        overflow-y: hidden;
+        padding-right: 20vw;
+        padding-left: 20vw;
+    }
+
+    #MenuPane:hover {
+        overflow-y: scroll;
+    }
+
+}
+
+#MenuPane ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#MenuPane a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.home-and-close-buttons-on-menu {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+    margin-bottom: 5vh;
+}
+
+#CloseMenuButton {
+    padding-top: 5vh;
+    padding-right: 5vw;
+    cursor: pointer;
+}
+
+#HomeButtonOnMenu {
+    padding-top: 5vh;
+    padding-left: 5vw;
+    cursor: pointer;
+}
+
+/* Text classes */
+
+.standard-font-family-text {
+    font-family: 'Lato', sans-serif;
+}
+
+.home-message-text {
+    font-size: 1em;
+    /*text-align: left;*/
+    /*font-weight: bold;*/
+}
+
+@media (min-width: 600px) {
+
+    .home-message-text {
+        font-size: 1.2em;
+        /*text-align: left;*/
+        /*font-weight: bold;*/
+    }
+
+}
+
+.menu-icon-text {
+    font-size: 2.5em;
+}
+
+.contact-me-form-font-size {
+    font-size: 1.1em;
+}
+
+/* Colors */
+
+.menu-buttons-color {
+    color: white;
+}
+
+/* Pane classes */
+
+.centred-pane {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.display-block-pane {
+    display: block;
+}
+
+/* Button classes */
+
+.standard-button {
+    background: #4178be;
+    border: 2px solid rgba(0,0,0,0.21);
+    border-bottom: 4px solid rgba(0,0,0,0.21);
+    border-radius: 4px;
+    color: white;
+    padding: 11px 18px;
+    cursor: pointer;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.standard-button:disabled {
+    background: white;
+    border: 2px solid rgba(0,0,0,0.21);
+    border-radius: 4px;
+    color: black;
+    padding: 11px 18px;
+    cursor: auto;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Image classes */
+
+.item-image {
+    position: absolute;
+    display: inline-block;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.diamond-shaped-element-clip {
+    float: left;
+    width: 200px;
+    height: 200px;
+    clip-path: polygon(0px 100px, 100px 200px, 200px 100px, 100px 0px);
+}
+
+.round-shaped-element-clip {
+    float: left;
+    width: 200px;
+    height: 200px;
+    clip-path: circle(100px at 100px 100px);
+}
+
+/* ContactMeView */
+
+#ContactMeView {
+    display: none;
+    position: fixed;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+    width: 90vw;
+    margin-left: 5vw;
+    height: 90%;
+    margin-top: 5vh;
+    background-color: white;
+    z-index: 40;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+
+}
+
+@media (min-width: 600px) {
+
+    #ContactMeView {
+        display: none;
+        position: fixed;
+        flex-direction: column;
+        align-content: center;
+        justify-content: flex-start;
+        width: 60vw;
+        margin-left: 20vw;
+        height: 60vh;
+        margin-top: 20vh;
+        background-color: white;
+        z-index: 40;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+
+}
+
+#CloseContactMeButton {
+    align-self: flex-end;
+    padding-top: 10px;
+    padding-right: 10px;
+    font-size: 24px;
+    color: #222222;
+}
+
+#CloseContactMeButton:hover {
+    cursor: pointer;
+}
+
+#ContactMePane {
+    padding-right: 5vw;
+    padding-left: 5vw;
+    overflow-y: hidden;
+}
+
+#message, #fullname, #email {
+    width: 70vw;
+}
+
+@media (min-width: 600px) {
+
+    #message, #fullname, #email {
+        width: 30vw;
+    }
+
+}
+
+#ContactMeSuccessMessage, #ContactMeFailureMessage {
+    display: none;
+}
+
+/* Special pages */
+
+.special-page-home-button-container {
+    position: absolute;
+    top: 5vh;
+    left: 5vw;
+}
+
+.special-page-home-button {
+    cursor: pointer;
+}
+
+.special-page-dialog {
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+    width: 90vw;
+    margin-left: 5vw;
+    height: 80%;
+    margin-top: 15vh;
+    background-color: white;
+    z-index: 40;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+@media (min-width: 600px) {
+
+    .special-page-dialog {
+        display: flex;
+        position: fixed;
+        flex-direction: column;
+        align-content: center;
+        justify-content: flex-start;
+        width: 50vw;
+        margin-left: 25vw;
+        height: 70vh;
+        margin-top: 15vh;
+        background-color: white;
+        z-index: 40;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    }
+
+}
+
+.special-page-content-pane {
+    padding-right: 30px;
+    padding-left: 30px;
+    overflow-y: auto;
+}
+
+@media (min-width: 600px) {
+
+    .special-page-content-pane {
+        overflow-y: hidden;
+    }
+
+    .special-page-content-pane:hover {
+        overflow-y: auto;
+    }
+
+}
