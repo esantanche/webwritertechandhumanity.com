@@ -41,6 +41,47 @@ function ItemView() {
 
     };
 
+    const collectItemDetailsFromMap = () => {
+
+        // {
+        //     "nid":"134",
+        //     "field_order_number":"35",
+        //     "title":"Contact Me",
+        //     "field_coordinate_x":"4300",
+        //     "field_coordinate_y":"1580",
+        //     "field_image":"",
+        //     "field_item_type":"ContactMe"
+        //  }
+
+        //         el.id === 'user'
+        // // el.dataset.id === '1234567890'
+        // // el.dataset.user === 'johndoe'
+        // // el.dataset.dateOfBirth === ''
+        
+        let self = this;
+
+        itemsDetails = [];
+
+        const itemElements = document.querySelectorAll("[data-nid]");
+
+        console.log("itemElements", itemElements);
+
+        itemElements.forEach((element) => {
+
+            itemsDetails.push({ "nid": element.dataset.nid, "field_order_number": element.dataset.order });
+
+        });
+
+        //let itemDetails = itemElements.map((element) => {
+        //    return { nid: element.dataset.data-nid, field_order_number: element.dataset.data-order };
+        //});
+
+        //let itemDetails = itemElements.map((element) => {
+        console.log("itemsDetails", itemsDetails);
+        // itemsDetails[] = { article.dataset.col }
+
+    }
+
     const itemOnClick = (order_number) => {
 
         viewModel.showItem(parseInt(order_number));
@@ -259,54 +300,54 @@ function ItemView() {
             $arrowsAndItemOrderNumbers.css('display', 'flex');
             $avatar.show();
 
-            itemsDetails.map((itemDetails) => {
+            // itemsDetails.map((itemDetails) => {
 
-                // field_coordinate_x: "2900"​
-                // field_coordinate_y: "2700"
-                // field_image: "/sites/default/files/2019-02/DorothyRowe.jpg"
-                // field_item_type: "Article"
-                // field_order_number: "2"
-                // nid: "100"
+            //     // field_coordinate_x: "2900"​
+            //     // field_coordinate_y: "2700"
+            //     // field_image: "/sites/default/files/2019-02/DorothyRowe.jpg"
+            //     // field_item_type: "Article"
+            //     // field_order_number: "2"
+            //     // nid: "100"
 
-                let urlImage;
-                let classNameForClipping = "";
+            //     let urlImage;
+            //     let classNameForClipping = "";
 
-                // Articles are shaped as circles, Ideas as diamonds, Subjects as Squares,
-                // Messages are identified by a standard icon to be chosen.
+            //     // Articles are shaped as circles, Ideas as diamonds, Subjects as Squares,
+            //     // Messages are identified by a standard icon to be chosen.
 
-                switch (itemDetails.field_item_type) {
-                    case "Article":
-                        urlImage = APP_CONFIGURATION.backendUrl + itemDetails.field_image;
-                        classNameForClipping = "round-shaped-element-clip";
-                        break;
-                    case "Idea":
-                        urlImage = APP_CONFIGURATION.backendUrl + itemDetails.field_image;
-                        classNameForClipping = "diamond-shaped-element-clip";
-                        break;
-                    case "Message":
-                        urlImage = "/Message.png";
-                        break;
-                    case "Subject":
-                        urlImage = APP_CONFIGURATION.backendUrl + itemDetails.field_image;
-                        break;
-                    case "ContactMe":
-                        urlImage = "/ContactMe.png";
-                        break;
-                    default:
-                }
+            //     switch (itemDetails.field_item_type) {
+            //         case "Article":
+            //             urlImage = APP_CONFIGURATION.backendUrl + itemDetails.field_image;
+            //             classNameForClipping = "round-shaped-element-clip";
+            //             break;
+            //         case "Idea":
+            //             urlImage = APP_CONFIGURATION.backendUrl + itemDetails.field_image;
+            //             classNameForClipping = "diamond-shaped-element-clip";
+            //             break;
+            //         case "Message":
+            //             urlImage = "/Message.png";
+            //             break;
+            //         case "Subject":
+            //             urlImage = APP_CONFIGURATION.backendUrl + itemDetails.field_image;
+            //             break;
+            //         case "ContactMe":
+            //             urlImage = "/ContactMe.png";
+            //             break;
+            //         default:
+            //     }
 
-                const $itemElement = jQuery('<div/>', {
-                    class: `item-image ${classNameForClipping}`,
-                    html: `<img src=${ urlImage }>`,
-                    style: `top: ${itemDetails.field_coordinate_y - 100}px; left: ${itemDetails.field_coordinate_x - 100}px;`
-                });
+            //     const $itemElement = jQuery('<div/>', {
+            //         class: `item-image ${classNameForClipping}`,
+            //         html: `<img src=${ urlImage }>`,
+            //         style: `top: ${itemDetails.field_coordinate_y - 100}px; left: ${itemDetails.field_coordinate_x - 100}px;`
+            //     });
 
-                // It's possible to click on an item's image to show the content of the item
-                $itemElement.bind( "click", () => { itemOnClick(itemDetails.field_order_number) } );
+            //     // It's possible to click on an item's image to show the content of the item
+            //     $itemElement.bind( "click", () => { itemOnClick(itemDetails.field_order_number) } );
 
-                $itemElement.appendTo($mapImage);
+            //     $itemElement.appendTo($mapImage);
 
-            });
+            // });
 
             if (document.location.pathname === "/web-writer-tech-and-humanity") {
 
@@ -340,11 +381,19 @@ function ItemView() {
 
             viewModel = viewModelToUse;
 
+            // FIXME do I get item details here? 
+            // yes!! then I call a setItemDetails function in the viewmodel to give the details to it, it needs them
+
+
+
             cacheJQueryObjects();
+
 
             setupStandardEventHandlers();
 
             registerEventHandlers();
+
+            collectItemDetailsFromMap();
 
         }
 

@@ -42,6 +42,9 @@ function ViewModel() {
 
         model.fetchItemDetails();
 
+        // FIXME just do it here because it's the viewmodel that has the map element
+        // FIXME better, it's ItemView that owns the map
+
     };
 
     const determineOrderNumberOfItemOfWhichToShowContent = () => {
@@ -352,6 +355,9 @@ function ViewModel() {
 
             // When the user clicks on the home page button, I have to tell ItemView
             // that it can show the map and populate it with the items that the model will provide
+
+            // FIXME everything to change
+            // FIXME no need for details from the model
 
             requestItemsDetailsFromModel();
 

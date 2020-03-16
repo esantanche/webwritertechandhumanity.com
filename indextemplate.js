@@ -1,3 +1,4 @@
+module.exports = (map) => `
 <!doctype html>
 
 <html lang="en">
@@ -72,7 +73,7 @@
 
         <div>
 
-            <div id="MapImage"></div>
+            ${map}
 
             <div id="Carpet">
                 <img class="carpet-image" src="/Carpet.gif">
@@ -208,3 +209,4 @@
 
     </body>
 </html>
+`

@@ -47,6 +47,10 @@ function Model() {
         // This function is to fetch item details
         fetchItemDetails: () => {
 
+            // FIXME replace with collecting data from the map
+
+            // FIXME this function is no longer useful because the map is generated on the server
+
             fetch(APP_CONFIGURATION.backendUrl + "/rest/WRT/view/items?_format=json", {
                 method: 'GET',
             })

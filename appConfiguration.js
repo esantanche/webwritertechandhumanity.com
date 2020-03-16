@@ -9,4 +9,3 @@ const APP_CONFIGURATION = {
     backendUrl: 'https://backend.emanuelesantanche.com',
     smallScreenWidth: 600
 };
-
