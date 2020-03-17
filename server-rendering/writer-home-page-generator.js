@@ -66,7 +66,7 @@ const produceElementHtmlForItem = (item) => {
 }
 
 
-var mapHtml;
+let mapHtml = "";
 
 const fetch = require('/usr/lib/node_modules/node-fetch');
 
@@ -90,6 +90,8 @@ fetch("https://backend.emanuelesantanche.com/rest/WRT/view/items?_format=json", 
 
             // TODO what about the other pages? the contact me? 
             // TODO what about the diamonds, the rounds?
+
+            console.log(response);
 
             response.map((item) =>  {
 

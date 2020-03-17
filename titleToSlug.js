@@ -6,6 +6,8 @@
 
 "use strict";
 
+// FIXME do I still use this function, or do I calculate the url on the server?
+
 /**
  * This function produces a slug from the title of an article.
  *

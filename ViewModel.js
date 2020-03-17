@@ -34,18 +34,18 @@ function ViewModel() {
     let nidOfItemToShow;
     let rebuildingPageOnPopStateEvent;
 
-    const requestItemsDetailsFromModel = () => {
+    // const requestItemsDetailsFromModel = () => {
 
-        // We are in the process of building the map here
+    //     // We are in the process of building the map here
 
-        // See registerEventHandlers for event handling
+    //     // See registerEventHandlers for event handling
 
-        model.fetchItemDetails();
+    //     model.fetchItemDetails();
 
-        // FIXME just do it here because it's the viewmodel that has the map element
-        // FIXME better, it's ItemView that owns the map
+    //     // FIXME just do it here because it's the viewmodel that has the map element
+    //     // FIXME better, it's ItemView that owns the map
 
-    };
+    // };
 
     const determineOrderNumberOfItemOfWhichToShowContent = () => {
 
@@ -136,6 +136,45 @@ function ViewModel() {
 
     };
 
+
+    // FIXME comments
+    const preparingToShowTheMap = () => {
+
+        // This is the case in which the url is about an item (/item/99/slug-here)
+        // We need to set orderNumberItemCurrentlyVisited otherwise the item's content
+        // doesn't show up
+        if (nidOfItemToShow) {
+            const item = itemsDetails.filter(item => {
+                return parseInt(item.nid) === nidOfItemToShow;
+            })[0];
+
+            orderNumberItemCurrentlyVisited = parseInt(item.field_order_number);
+        } else {
+
+            // In this case we are on the starting point of the spiral, to which
+            // we assign url /web-writer-tech-and-humanity
+
+            const urlWebWriterTechAndHumanity = "/web-writer-tech-and-humanity";
+
+            if (urlWebWriterTechAndHumanity !== document.location.pathname) {
+                history.pushState(null, null, urlWebWriterTechAndHumanity);
+            }
+
+        }
+
+        // Telling views that the items are ready to be used to build the map
+        events.trigger('ViewModel.map.show');
+
+
+        // When the user clicks on the home page button we show the map, the items,
+        // the arrows and we show the menu button as well
+        events.trigger('ViewModel.menu.showbutton');
+
+    }
+
+
+    
+
     /**
      * It's where we rebuild the page when the url is about an item or when we need to
      * go to the home
@@ -167,7 +206,32 @@ function ViewModel() {
              * @memberOf ViewModel
              */
             events.trigger('ViewModel.nonemptypathname.show');
-            requestItemsDetailsFromModel();
+            //requestItemsDetailsFromModel();
+
+            preparingToShowTheMap();
+
+            // if (nidOfItemToShow) {
+            //     const item = itemsDetails.filter(item => {
+            //         return parseInt(item.nid) === nidOfItemToShow;
+            //     })[0];
+
+            //     orderNumberItemCurrentlyVisited = parseInt(item.field_order_number);
+            // } else {
+
+            //     // In this case we are on the starting point of the spiral, to which
+            //     // we assign url /web-writer-tech-and-humanity
+
+            //     const urlWebWriterTechAndHumanity = "/web-writer-tech-and-humanity";
+
+            //     if (urlWebWriterTechAndHumanity !== document.location.pathname) {
+            //         history.pushState(null, null, urlWebWriterTechAndHumanity);
+            //     }
+
+            // }
+
+            // // Telling views that the items are ready to be used to build the map
+            // events.trigger('ViewModel.itemsDetails.ready');
+
 
         } else if (pathname === "/") {
 
@@ -219,7 +283,7 @@ function ViewModel() {
             // The Model has just fetched the content of the item we have to display
             // We put in itemToShow the item the appropriate view has to show
 
-            itemsDetails = model.getItemsDetails();
+            //itemsDetails = model.getItemsDetails();
 
             itemToShow = itemsDetails.filter(item => {
                 return parseInt(item.field_order_number) === orderNumberOfItemOfWhichToShowContent;
@@ -242,44 +306,44 @@ function ViewModel() {
         });
 
         // This is what will happen when the model triggers the event of items details ready
-        model.attachEventHandler('Model.itemsDetails.ready', () => {
+        // model.attachEventHandler('Model.itemsDetails.ready', () => {
 
-            itemsDetails = model.getItemsDetails();
+        //     //itemsDetails = model.getItemsDetails();
 
-            // This is the case in which the url is about an item (/item/99/slug-here)
-            // We need to set orderNumberItemCurrentlyVisited otherwise the item's content
-            // doesn't show up
-            if (nidOfItemToShow) {
-                const item = itemsDetails.filter(item => {
-                    return parseInt(item.nid) === nidOfItemToShow;
-                })[0];
+        //     // This is the case in which the url is about an item (/item/99/slug-here)
+        //     // We need to set orderNumberItemCurrentlyVisited otherwise the item's content
+        //     // doesn't show up
+        //     if (nidOfItemToShow) {
+        //         const item = itemsDetails.filter(item => {
+        //             return parseInt(item.nid) === nidOfItemToShow;
+        //         })[0];
 
-                orderNumberItemCurrentlyVisited = parseInt(item.field_order_number);
-            } else {
+        //         orderNumberItemCurrentlyVisited = parseInt(item.field_order_number);
+        //     } else {
 
-                // In this case we are on the starting point of the spiral, to which
-                // we assign url /web-writer-tech-and-humanity
+        //         // In this case we are on the starting point of the spiral, to which
+        //         // we assign url /web-writer-tech-and-humanity
 
-                const urlWebWriterTechAndHumanity = "/web-writer-tech-and-humanity";
+        //         const urlWebWriterTechAndHumanity = "/web-writer-tech-and-humanity";
 
-                if (urlWebWriterTechAndHumanity !== document.location.pathname) {
-                    history.pushState(null, null, urlWebWriterTechAndHumanity);
-                }
+        //         if (urlWebWriterTechAndHumanity !== document.location.pathname) {
+        //             history.pushState(null, null, urlWebWriterTechAndHumanity);
+        //         }
 
-            }
+        //     }
 
-            // Telling views that the items are ready to be used to build the map
-            events.trigger('ViewModel.itemsDetails.ready');
+        //     // Telling views that the items are ready to be used to build the map
+        //     events.trigger('ViewModel.itemsDetails.ready');
 
-        });
+        // });
 
         // This is what will happen if the model triggers the error event when fetching
         // items details
-        model.attachEventHandler('Model.itemsDetails.error', () => {
+        // model.attachEventHandler('Model.itemsDetails.error', () => {
 
-            Sentry.captureMessage("ViewModel - Error in requesting item details");
+        //     Sentry.captureMessage("ViewModel - Error in requesting item details");
 
-        });
+        // });
 
         model.attachEventHandler('Model.contactmeform.success', () => {
 
@@ -305,6 +369,11 @@ function ViewModel() {
 
             model = modelToUse;
 
+            if (itemsDetails)
+                model.setItemsDetails(itemsDetails);
+            else
+                Sentry.captureMessage("itemsDetails not defined in ViewModel::init");
+
             viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
             viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
 
@@ -312,16 +381,28 @@ function ViewModel() {
             animationToNextItemRunning = false;
             rebuildingPageOnPopStateEvent = false;
 
+            registerBrowserNavigationEventHandler();
+
+            registerEventHandlers();
+
             // The URL is not just the home, it's the URL of an item
             if (window.location.pathname !== "/") {
 
                 showItemContentOnNonEmptyPathname(window.location.pathname);
 
+            } else {
+
+                // FIXME now we start with display none for the home?
+
+                events.trigger("ViewModel.home.goto");
+
             }
 
-            registerBrowserNavigationEventHandler();
+        },
 
-            registerEventHandlers();
+        setItemsDetails: (itemsDetailsFromItemView) => {
+
+            itemsDetails = itemsDetailsFromItemView;
 
         },
 
@@ -359,11 +440,45 @@ function ViewModel() {
             // FIXME everything to change
             // FIXME no need for details from the model
 
-            requestItemsDetailsFromModel();
+            // FIXME requestItemsDetailsFromModel();
+
+
+            // FIXME does this work?
+
+            // FIXME am i duplicating this?
+
+            preparingToShowTheMap();
+
+            // // This is the case in which the url is about an item (/item/99/slug-here)
+            // // We need to set orderNumberItemCurrentlyVisited otherwise the item's content
+            // // doesn't show up
+            // if (nidOfItemToShow) {
+            //     const item = itemsDetails.filter(item => {
+            //         return parseInt(item.nid) === nidOfItemToShow;
+            //     })[0];
+
+            //     orderNumberItemCurrentlyVisited = parseInt(item.field_order_number);
+            // } else {
+
+            //     // In this case we are on the starting point of the spiral, to which
+            //     // we assign url /web-writer-tech-and-humanity
+
+            //     const urlWebWriterTechAndHumanity = "/web-writer-tech-and-humanity";
+
+            //     if (urlWebWriterTechAndHumanity !== document.location.pathname) {
+            //         history.pushState(null, null, urlWebWriterTechAndHumanity);
+            //     }
+
+            // }
+
+            // // FIXME is this event actually used?
+
+            // // Telling views that the items are ready to be used to build the map
+            // events.trigger('ViewModel.itemsDetails.ready');
+
 
             // When the user clicks on the home page button we show the map, the items,
             // the arrows and we show the menu button as well
-            events.trigger('ViewModel.menu.showbutton');
 
         },
 

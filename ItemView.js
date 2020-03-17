@@ -26,6 +26,7 @@ function ItemView() {
 
     let itemsDetails;
     let itemToShowBecauseItIsInTheURL;
+    let performAnimations;
 
     // Private functions
 
@@ -58,17 +59,27 @@ function ItemView() {
         // // el.dataset.user === 'johndoe'
         // // el.dataset.dateOfBirth === ''
         
-        let self = this;
-
         itemsDetails = [];
 
         const itemElements = document.querySelectorAll("[data-nid]");
 
-        console.log("itemElements", itemElements);
+        // console.log("itemElements", itemElements);
+
+        // dataAttributes = `data-nid="${item.nid}" 
+        // data-order="${item.field_order_number}" 
+        // data-title="${item.title}"
+        // data-x-coord="${item.field_coordinate_x}"
+        // data-y-coord="${item.field_coordinate_y}"
+        // data-type="${item.field_item_type}"`;
 
         itemElements.forEach((element) => {
 
-            itemsDetails.push({ "nid": element.dataset.nid, "field_order_number": element.dataset.order });
+            itemsDetails.push({ "nid": element.dataset.nid, 
+                                "field_order_number": element.dataset.order,
+                                "title": element.dataset.title,
+                                "field_coordinate_x": element.dataset.xCoord,
+                                "field_coordinate_y": element.dataset.yCoord,
+                                "field_item_type": element.dataset.type  });
 
         });
 
@@ -77,8 +88,10 @@ function ItemView() {
         //});
 
         //let itemDetails = itemElements.map((element) => {
-        console.log("itemsDetails", itemsDetails);
+        // console.log("itemsDetails", itemsDetails);
         // itemsDetails[] = { article.dataset.col }
+
+        viewModel.setItemsDetails(itemsDetails);
 
     }
 
@@ -134,6 +147,10 @@ function ItemView() {
 
                 itemToVisitNext = itemToShowBecauseItIsInTheURL;
                 itemToShowBecauseItIsInTheURL = undefined;
+                performAnimations = false;
+
+                console.log("clickOnArrowHandler, itemToShowBecauseItIsInTheURL ", itemToShowBecauseItIsInTheURL);
+                console.log("performAnimations ", performAnimations);
 
             } else {
 
@@ -166,9 +183,22 @@ function ItemView() {
                 // The angle of the direction we take to get to the item. Used to rotate the carpet accordingly
                 const angle = Math.atan2(delta_y, delta_x) * (180 / Math.PI);
 
-                // Rotating the carpet
-                $carpet.velocity({ transform: ["rotateZ(" + angle + "deg)", "rotateZ(" + previousAngle + "deg)"] },
+
+                // FIXME here I do the animation only if itemToShowBecauseItIsInTheURL is false
+
+
+                if (performAnimations) {
+                    // Rotating the carpet
+                    $carpet.velocity({ transform: ["rotateZ(" + angle + "deg)", "rotateZ(" + previousAngle + "deg)"] },
                     { duration: 1000, easing: "linear", loop: false});
+                } else {
+                    
+                    // FIXME rotate the carpet with no animation
+                    $carpet.css("transform", "rotateZ(" + angle + "deg)");
+
+                    //performAnimations = true;
+
+                }
 
                 previousAngle = angle;
 
@@ -178,17 +208,30 @@ function ItemView() {
                 // We don't want the carpet to be over the item's image
                 const approachingFactor = maxDelta / 100;
 
-                $mapImage.animate({ top: positionItemToVisitNext.top + (delta_y / approachingFactor),
+                const showingItemAtTheEndOfTheAnimation = () => {
+                    viewModel.setAnimationToNextItemRunning(false);
+
+                    updateItemOrderNumbers(itemToVisitNext);
+                    viewModel.showItem();
+                }
+
+                if (performAnimations) {
+                    console.log("inside if performAnimations", performAnimations);
+                    $mapImage.animate({ top: positionItemToVisitNext.top + (delta_y / approachingFactor),
                         left: positionItemToVisitNext.left + (delta_x / approachingFactor)}, 1500, null,
-                    () => {
+                        () => {
+                            showingItemAtTheEndOfTheAnimation();
+                        }
+                    );
+                } else {
 
-                        viewModel.setAnimationToNextItemRunning(false);
+                    $mapImage.css("top", positionItemToVisitNext.top + (delta_y / approachingFactor));
+                    $mapImage.css("left", positionItemToVisitNext.left + (delta_x / approachingFactor));
 
-                        updateItemOrderNumbers(itemToVisitNext);
-                        viewModel.showItem();
+                    showingItemAtTheEndOfTheAnimation();
 
-                    }
-                );
+                    performAnimations = true;
+                }
 
             }
 
@@ -260,7 +303,11 @@ function ItemView() {
 
             // Removing all children of mapImage because they will be recreated when the user clicks on "Go"
             // to get to the map again
-            $mapImage.children().remove();
+
+            // FIXME no! the mapImage children won't be recreated when the user clicks on "Go"
+            // If I delete them, they are gone
+
+            //$mapImage.children().remove();
 
             // Moving the map back to the center
             $mapImage.css({top: "calc(-3500px + 50vh)", left: "calc(-3500px + 50vw)"});
@@ -281,16 +328,16 @@ function ItemView() {
         });
 
         // @see ViewModel::requestItemsDetailsFromModel
-        viewModel.attachEventHandler('ViewModel.itemsDetails.ready', () => {
+        viewModel.attachEventHandler('ViewModel.map.show', () => {
 
-            // We got the items' details and we are going to build the map
+            // FIXME We got the items' details and we are going to build the map
 
-            itemsDetails = viewModel.getItemsDetails();
+            //itemsDetails = viewModel.getItemsDetails();
 
             if (!itemsDetails) {
                 // Exception! There is a bug here!
 
-                Sentry.captureMessage("itemsDetails not defined! ViewModel.itemsDetails.ready --- ItemView");
+                Sentry.captureMessage("itemsDetails not defined! ViewModel.map.show --- ItemView");
 
             }
 
@@ -299,55 +346,6 @@ function ItemView() {
 
             $arrowsAndItemOrderNumbers.css('display', 'flex');
             $avatar.show();
-
-            // itemsDetails.map((itemDetails) => {
-
-            //     // field_coordinate_x: "2900"​
-            //     // field_coordinate_y: "2700"
-            //     // field_image: "/sites/default/files/2019-02/DorothyRowe.jpg"
-            //     // field_item_type: "Article"
-            //     // field_order_number: "2"
-            //     // nid: "100"
-
-            //     let urlImage;
-            //     let classNameForClipping = "";
-
-            //     // Articles are shaped as circles, Ideas as diamonds, Subjects as Squares,
-            //     // Messages are identified by a standard icon to be chosen.
-
-            //     switch (itemDetails.field_item_type) {
-            //         case "Article":
-            //             urlImage = APP_CONFIGURATION.backendUrl + itemDetails.field_image;
-            //             classNameForClipping = "round-shaped-element-clip";
-            //             break;
-            //         case "Idea":
-            //             urlImage = APP_CONFIGURATION.backendUrl + itemDetails.field_image;
-            //             classNameForClipping = "diamond-shaped-element-clip";
-            //             break;
-            //         case "Message":
-            //             urlImage = "/Message.png";
-            //             break;
-            //         case "Subject":
-            //             urlImage = APP_CONFIGURATION.backendUrl + itemDetails.field_image;
-            //             break;
-            //         case "ContactMe":
-            //             urlImage = "/ContactMe.png";
-            //             break;
-            //         default:
-            //     }
-
-            //     const $itemElement = jQuery('<div/>', {
-            //         class: `item-image ${classNameForClipping}`,
-            //         html: `<img src=${ urlImage }>`,
-            //         style: `top: ${itemDetails.field_coordinate_y - 100}px; left: ${itemDetails.field_coordinate_x - 100}px;`
-            //     });
-
-            //     // It's possible to click on an item's image to show the content of the item
-            //     $itemElement.bind( "click", () => { itemOnClick(itemDetails.field_order_number) } );
-
-            //     $itemElement.appendTo($mapImage);
-
-            // });
 
             if (document.location.pathname === "/web-writer-tech-and-humanity") {
 
@@ -362,6 +360,8 @@ function ItemView() {
                 itemToShowBecauseItIsInTheURL = viewModel.getItemToShowBecauseItIsInTheURL();
 
                 if (itemToShowBecauseItIsInTheURL) {
+
+                    // FIXME here we need to fix the animations
 
                     // When showing an item because the user landed directly on the item's url, we simulate a click on an arrow
                     // that will move the carpet to the item
@@ -380,6 +380,8 @@ function ItemView() {
         init: (viewModelToUse) => {
 
             viewModel = viewModelToUse;
+
+            performAnimations = true;
 
             // FIXME do I get item details here? 
             // yes!! then I call a setItemDetails function in the viewmodel to give the details to it, it needs them

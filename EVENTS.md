@@ -1,5 +1,7 @@
 # Events Naming convention
 
+FIXME this file is obsolete
+
 Only one class (view, viewmodel or model) provides the function that attaches an event handler to
 an event. The class is the owner of the event. The first part of the event's name is the name
 of this class.
