@@ -44,38 +44,6 @@ function Model() {
 
         },
 
-        // This function is to fetch item details
-        // fetchItemDetails: () => {
-
-        //     // FIXME replace with collecting data from the map
-
-        //     // FIXME this function is no longer useful because the map is generated on the server
-
-        //     fetch(APP_CONFIGURATION.backendUrl + "/rest/WRT/view/items?_format=json", {
-        //         method: 'GET',
-        //     })
-        //         .then((response) => {
-        //             if (!response.ok) { throw response }
-        //             return response.json()
-        //         })
-        //         .then((response) => {
-
-        //             // console.log('response',response);
-
-        //             itemsDetails = response;
-
-        //             itemsDetailsReady = true;
-        //             events.trigger('Model.itemsDetails.ready');
-        //         })
-        //         .catch((error) => {
-
-        //             const error_message = error_message_from_error(error);
-
-        //             Sentry.captureMessage(error_message);
-
-        //         });
-        // },
-
         /**
          * To fetch the content of a single item given the order number on the map
          * @param orderNumber
@@ -157,17 +125,6 @@ function Model() {
             itemsDetails = itemsDetailsFromViewModel;
 
         },
-
-        // setItemsDetails: () => {
-
-        //     if (!itemsDetailsReady) {
-
-        //         return null;
-        //     }
-
-        //     return itemsDetails;
-
-        // },
 
         attachEventHandler: (event, handler) => {
 

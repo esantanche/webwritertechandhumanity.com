@@ -42,35 +42,19 @@ function ItemView() {
 
     };
 
+    /**
+     * FIXME
+     * Now I don't fetch item details from the backend because the index.html file comes with
+     * them ready to use. I collect the details from the elements.
+     * 
+     * See server-rendering/writer-home-page-generator.js to know how the details are incorporated
+     * in the page.
+     */
     const collectItemDetailsFromMap = () => {
-
-        // {
-        //     "nid":"134",
-        //     "field_order_number":"35",
-        //     "title":"Contact Me",
-        //     "field_coordinate_x":"4300",
-        //     "field_coordinate_y":"1580",
-        //     "field_image":"",
-        //     "field_item_type":"ContactMe"
-        //  }
-
-        //         el.id === 'user'
-        // // el.dataset.id === '1234567890'
-        // // el.dataset.user === 'johndoe'
-        // // el.dataset.dateOfBirth === ''
         
         itemsDetails = [];
 
         const itemElements = document.querySelectorAll("[data-nid]");
-
-        // console.log("itemElements", itemElements);
-
-        // dataAttributes = `data-nid="${item.nid}" 
-        // data-order="${item.field_order_number}" 
-        // data-title="${item.title}"
-        // data-x-coord="${item.field_coordinate_x}"
-        // data-y-coord="${item.field_coordinate_y}"
-        // data-type="${item.field_item_type}"`;
 
         itemElements.forEach((element) => {
 
@@ -79,34 +63,22 @@ function ItemView() {
                                 "title": element.dataset.title,
                                 "field_coordinate_x": element.dataset.xCoord,
                                 "field_coordinate_y": element.dataset.yCoord,
-                                "field_item_type": element.dataset.type  });
+                                "field_item_type": element.dataset.type,
+                                "path": element.dataset.path });
 
         });
 
-        //let itemDetails = itemElements.map((element) => {
-        //    return { nid: element.dataset.data-nid, field_order_number: element.dataset.data-order };
-        //});
-
-        //let itemDetails = itemElements.map((element) => {
-        // console.log("itemsDetails", itemsDetails);
-        // itemsDetails[] = { article.dataset.col }
-
+        // the viewModel needs to know about the items details as well
         viewModel.setItemsDetails(itemsDetails);
 
     }
-
-    const itemOnClick = (order_number) => {
-
-        viewModel.showItem(parseInt(order_number));
-
-    };
-
+    
     const moveToStartingPointOfSpiral = () => {
 
         // We are going to move the carpet to the starting point of the spiral
 
         // We set the animation running. The viewModel will take care of closing
-        // the item content panel, if nay. It will also close any contact me form.
+        // the item content panel, if any. It will also close any contact me form.
         viewModel.setAnimationToNextItemRunning(true);
 
         const viewport = viewModel.getViewPort();
@@ -118,9 +90,26 @@ function ItemView() {
 
         previousAngle = 0;
 
+        const mapImagePosition = $mapImage.position();
+
+        const currentTop = Math.round(mapImagePosition.top);
+        const currentLeft = Math.round(mapImagePosition.left);
+
+        let animationDuration = 1500;
+
+        // If the carpet is already very near the place it's going to,
+        // I want to get there very quickly so that the user can
+        // click on the arrows with no delay
+        // If I have the animation last 1500ms, the user may click on an arrow and
+        // nothing happens
+        if (Math.abs(currentTop - (viewport.height / 2 - 3500)) < 200 && 
+            Math.abs(currentLeft - (viewport.width / 2 - 3500)) < 200) {
+            animationDuration = 100; 
+        }
+
         // Now animating the carpet to go to the starting point of the spiral
         $mapImage.animate({ top: viewport.height / 2 - 3500 ,
-                left: viewport.width / 2 - 3500 }, 1500, null,
+                left: viewport.width / 2 - 3500 }, animationDuration, null,
             () => {
 
                 // console.log('animation to spiral starting point completed');
@@ -134,6 +123,10 @@ function ItemView() {
     };
 
     const clickOnArrowHandler = (event) => {
+
+        // console.log(event);
+
+        // console.log(viewModel.getAnimationToNextItemRunning());
 
         // Only if we are not already flying to the next item, do the following
         if (!viewModel.getAnimationToNextItemRunning()) {
@@ -149,8 +142,8 @@ function ItemView() {
                 itemToShowBecauseItIsInTheURL = undefined;
                 performAnimations = false;
 
-                console.log("clickOnArrowHandler, itemToShowBecauseItIsInTheURL ", itemToShowBecauseItIsInTheURL);
-                console.log("performAnimations ", performAnimations);
+                // console.log("clickOnArrowHandler, itemToShowBecauseItIsInTheURL ", itemToShowBecauseItIsInTheURL);
+                // console.log("performAnimations ", performAnimations);
 
             } else {
 
@@ -183,20 +176,16 @@ function ItemView() {
                 // The angle of the direction we take to get to the item. Used to rotate the carpet accordingly
                 const angle = Math.atan2(delta_y, delta_x) * (180 / Math.PI);
 
-
-                // FIXME here I do the animation only if itemToShowBecauseItIsInTheURL is false
-
-
                 if (performAnimations) {
+
                     // Rotating the carpet
                     $carpet.velocity({ transform: ["rotateZ(" + angle + "deg)", "rotateZ(" + previousAngle + "deg)"] },
                     { duration: 1000, easing: "linear", loop: false});
+
                 } else {
                     
-                    // FIXME rotate the carpet with no animation
+                    // Rotate the carpet with no animation
                     $carpet.css("transform", "rotateZ(" + angle + "deg)");
-
-                    //performAnimations = true;
 
                 }
 
@@ -216,13 +205,14 @@ function ItemView() {
                 }
 
                 if (performAnimations) {
-                    console.log("inside if performAnimations", performAnimations);
+
                     $mapImage.animate({ top: positionItemToVisitNext.top + (delta_y / approachingFactor),
                         left: positionItemToVisitNext.left + (delta_x / approachingFactor)}, 1500, null,
                         () => {
                             showingItemAtTheEndOfTheAnimation();
                         }
                     );
+
                 } else {
 
                     $mapImage.css("top", positionItemToVisitNext.top + (delta_y / approachingFactor));
@@ -230,7 +220,9 @@ function ItemView() {
 
                     showingItemAtTheEndOfTheAnimation();
 
+                    // Now I can finally reset performAnimations to true to restart doing animations
                     performAnimations = true;
+
                 }
 
             }
@@ -260,6 +252,8 @@ function ItemView() {
      */
     const setupStandardEventHandlers = () => {
 
+        //console.log("binding events");
+
         $backArrow.bind('click', clickOnArrowHandler);
         $forwardArrow.bind('click', clickOnArrowHandler);
 
@@ -273,7 +267,7 @@ function ItemView() {
      */
     const registerEventHandlers = () => {
 
-        // Hide the arrows only on small screens. On large screen keep them.
+        // Hide the arrows only on small screens. On large screens keep them.
         const hideNavigationArrows = () => {
             if (viewModel.itIsASmallScreen())
                 $arrowsAndItemOrderNumbers.hide();
@@ -301,14 +295,6 @@ function ItemView() {
 
             // Going to the home, hiding everything and resetting some variables
 
-            // Removing all children of mapImage because they will be recreated when the user clicks on "Go"
-            // to get to the map again
-
-            // FIXME no! the mapImage children won't be recreated when the user clicks on "Go"
-            // If I delete them, they are gone
-
-            //$mapImage.children().remove();
-
             // Moving the map back to the center
             $mapImage.css({top: "calc(-3500px + 50vh)", left: "calc(-3500px + 50vw)"});
 
@@ -330,10 +316,6 @@ function ItemView() {
         // @see ViewModel::requestItemsDetailsFromModel
         viewModel.attachEventHandler('ViewModel.map.show', () => {
 
-            // FIXME We got the items' details and we are going to build the map
-
-            //itemsDetails = viewModel.getItemsDetails();
-
             if (!itemsDetails) {
                 // Exception! There is a bug here!
 
@@ -349,8 +331,6 @@ function ItemView() {
 
             if (document.location.pathname === "/web-writer-tech-and-humanity") {
 
-                // console.log('ViewModel.itemsDetails.ready document.location.pathname',document.location.pathname);
-
                 moveToStartingPointOfSpiral();
 
             } else {
@@ -360,8 +340,6 @@ function ItemView() {
                 itemToShowBecauseItIsInTheURL = viewModel.getItemToShowBecauseItIsInTheURL();
 
                 if (itemToShowBecauseItIsInTheURL) {
-
-                    // FIXME here we need to fix the animations
 
                     // When showing an item because the user landed directly on the item's url, we simulate a click on an arrow
                     // that will move the carpet to the item
@@ -383,13 +361,7 @@ function ItemView() {
 
             performAnimations = true;
 
-            // FIXME do I get item details here? 
-            // yes!! then I call a setItemDetails function in the viewmodel to give the details to it, it needs them
-
-
-
             cacheJQueryObjects();
-
 
             setupStandardEventHandlers();
 

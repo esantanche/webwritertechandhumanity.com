@@ -77,9 +77,6 @@ function HomeMessageView() {
          */
         viewModel.attachEventHandler('ViewModel.home.goto', () => {
 
-            // FIXME Hiding the home message if the user landed with a non empty pathname like
-            // http://localhost/item/9/introducing-articles
-
             $HomeMessageView.show();
 
         });

@@ -47,10 +47,12 @@ function MenuView() {
 
         itemsDetails.map((itemDetails) => {
 
+            // FIXME here it would be good to have the url already calculated
+
             const $menuListElement = $('<li>', {
                 html: $('<a>', {
                     class: "standard-font-family-text",
-                    href: "/item/" + itemDetails.nid + "/" + titleToSlug(itemDetails.title),
+                    href: itemDetails.path,
                     text: itemDetails.field_order_number + " - " + itemDetails.title,
                 })
             });

@@ -34,19 +34,6 @@ function ViewModel() {
     let nidOfItemToShow;
     let rebuildingPageOnPopStateEvent;
 
-    // const requestItemsDetailsFromModel = () => {
-
-    //     // We are in the process of building the map here
-
-    //     // See registerEventHandlers for event handling
-
-    //     model.fetchItemDetails();
-
-    //     // FIXME just do it here because it's the viewmodel that has the map element
-    //     // FIXME better, it's ItemView that owns the map
-
-    // };
-
     const determineOrderNumberOfItemOfWhichToShowContent = () => {
 
         // We need the order number of the item we are going to show
@@ -82,7 +69,7 @@ function ViewModel() {
      */
     const changeURLToMatchItemWhoseContentIsShown = (itemCurrentlyShown) => {
 
-        const urlForItemCurrentlyShown = "/item/" + itemCurrentlyShown.nid + "/" + titleToSlug(itemCurrentlyShown.title);
+        const urlForItemCurrentlyShown = itemCurrentlyShown.path;
 
         // Only if the url is not the same as the one shown, we push the new url
         // to the history
@@ -128,7 +115,7 @@ function ViewModel() {
 
         window.onpopstate = function() {
 
-            console.log('onpopstate document.location.pathname', document.location.pathname);
+            //console.log('onpopstate document.location.pathname', document.location.pathname);
 
             rebuildPageOnChangeOfURL(document.location.pathname);
 
@@ -136,8 +123,6 @@ function ViewModel() {
 
     };
 
-
-    // FIXME comments
     const preparingToShowTheMap = () => {
 
         // This is the case in which the url is about an item (/item/99/slug-here)
@@ -171,9 +156,6 @@ function ViewModel() {
         events.trigger('ViewModel.menu.showbutton');
 
     }
-
-
-    
 
     /**
      * It's where we rebuild the page when the url is about an item or when we need to
@@ -209,29 +191,6 @@ function ViewModel() {
             //requestItemsDetailsFromModel();
 
             preparingToShowTheMap();
-
-            // if (nidOfItemToShow) {
-            //     const item = itemsDetails.filter(item => {
-            //         return parseInt(item.nid) === nidOfItemToShow;
-            //     })[0];
-
-            //     orderNumberItemCurrentlyVisited = parseInt(item.field_order_number);
-            // } else {
-
-            //     // In this case we are on the starting point of the spiral, to which
-            //     // we assign url /web-writer-tech-and-humanity
-
-            //     const urlWebWriterTechAndHumanity = "/web-writer-tech-and-humanity";
-
-            //     if (urlWebWriterTechAndHumanity !== document.location.pathname) {
-            //         history.pushState(null, null, urlWebWriterTechAndHumanity);
-            //     }
-
-            // }
-
-            // // Telling views that the items are ready to be used to build the map
-            // events.trigger('ViewModel.itemsDetails.ready');
-
 
         } else if (pathname === "/") {
 
@@ -283,8 +242,6 @@ function ViewModel() {
             // The Model has just fetched the content of the item we have to display
             // We put in itemToShow the item the appropriate view has to show
 
-            //itemsDetails = model.getItemsDetails();
-
             itemToShow = itemsDetails.filter(item => {
                 return parseInt(item.field_order_number) === orderNumberOfItemOfWhichToShowContent;
             })[0];
@@ -304,46 +261,6 @@ function ViewModel() {
             events.trigger('ViewModel.item.show');
 
         });
-
-        // This is what will happen when the model triggers the event of items details ready
-        // model.attachEventHandler('Model.itemsDetails.ready', () => {
-
-        //     //itemsDetails = model.getItemsDetails();
-
-        //     // This is the case in which the url is about an item (/item/99/slug-here)
-        //     // We need to set orderNumberItemCurrentlyVisited otherwise the item's content
-        //     // doesn't show up
-        //     if (nidOfItemToShow) {
-        //         const item = itemsDetails.filter(item => {
-        //             return parseInt(item.nid) === nidOfItemToShow;
-        //         })[0];
-
-        //         orderNumberItemCurrentlyVisited = parseInt(item.field_order_number);
-        //     } else {
-
-        //         // In this case we are on the starting point of the spiral, to which
-        //         // we assign url /web-writer-tech-and-humanity
-
-        //         const urlWebWriterTechAndHumanity = "/web-writer-tech-and-humanity";
-
-        //         if (urlWebWriterTechAndHumanity !== document.location.pathname) {
-        //             history.pushState(null, null, urlWebWriterTechAndHumanity);
-        //         }
-
-        //     }
-
-        //     // Telling views that the items are ready to be used to build the map
-        //     events.trigger('ViewModel.itemsDetails.ready');
-
-        // });
-
-        // This is what will happen if the model triggers the error event when fetching
-        // items details
-        // model.attachEventHandler('Model.itemsDetails.error', () => {
-
-        //     Sentry.captureMessage("ViewModel - Error in requesting item details");
-
-        // });
 
         model.attachEventHandler('Model.contactmeform.success', () => {
 
@@ -392,7 +309,7 @@ function ViewModel() {
 
             } else {
 
-                // FIXME now we start with display none for the home?
+                // In case the path is "/", we go to the home page
 
                 events.trigger("ViewModel.home.goto");
 
@@ -434,51 +351,7 @@ function ViewModel() {
 
         userClickedOnHomePageButton: () => {
 
-            // When the user clicks on the home page button, I have to tell ItemView
-            // that it can show the map and populate it with the items that the model will provide
-
-            // FIXME everything to change
-            // FIXME no need for details from the model
-
-            // FIXME requestItemsDetailsFromModel();
-
-
-            // FIXME does this work?
-
-            // FIXME am i duplicating this?
-
             preparingToShowTheMap();
-
-            // // This is the case in which the url is about an item (/item/99/slug-here)
-            // // We need to set orderNumberItemCurrentlyVisited otherwise the item's content
-            // // doesn't show up
-            // if (nidOfItemToShow) {
-            //     const item = itemsDetails.filter(item => {
-            //         return parseInt(item.nid) === nidOfItemToShow;
-            //     })[0];
-
-            //     orderNumberItemCurrentlyVisited = parseInt(item.field_order_number);
-            // } else {
-
-            //     // In this case we are on the starting point of the spiral, to which
-            //     // we assign url /web-writer-tech-and-humanity
-
-            //     const urlWebWriterTechAndHumanity = "/web-writer-tech-and-humanity";
-
-            //     if (urlWebWriterTechAndHumanity !== document.location.pathname) {
-            //         history.pushState(null, null, urlWebWriterTechAndHumanity);
-            //     }
-
-            // }
-
-            // // FIXME is this event actually used?
-
-            // // Telling views that the items are ready to be used to build the map
-            // events.trigger('ViewModel.itemsDetails.ready');
-
-
-            // When the user clicks on the home page button we show the map, the items,
-            // the arrows and we show the menu button as well
 
         },
 

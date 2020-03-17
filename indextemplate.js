@@ -1,3 +1,6 @@
+// This is the template of the index.html page
+// the script writer-home-page-generator.js uses it to generate the index.html page
+
 module.exports = (map) => `
 <!doctype html>
 
@@ -177,7 +180,6 @@ module.exports = (map) => `
 
         </div>
 
-        <script src="/titleToSlug.js"></script>
         <script src="/errorMessages.js"></script>
         <script src="/appConfiguration.js"></script>
         <script src="/Model.js"></script>

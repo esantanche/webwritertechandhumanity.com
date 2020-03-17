@@ -91,8 +91,6 @@ function ItemContentView() {
     // Returning the object including public functions and, possibly, public variables
     return {
 
-        // Initialise the view with a DOM node (container) and a model to render.
-        // Container is the element containing the input field and the output
         init: (viewModelToUse) => {
 
             viewModel = viewModelToUse;
