@@ -60,8 +60,10 @@ module.exports = (map) => `
                 <p><i>Hello, my name is Emanuele.</i></p>
                 <p><i>I am a web writer specialising in technology and humanity.</i></p>
                 <p><i>I write about Human Energy (self-help,
-                    education, sociology, psychology) and Software Development (languages, methodologies, project
-                    management, algorithms, frameworks).</i></p>
+                    education, sociology and psychology) and Software Development (languages, methodologies, project
+                    management, algorithms and frameworks).</i></p>
+                <p><i>Thanks to my 5-rewrite writing process, I can write for you crystal clear articles that will improve your reputation as a great communicator.</i></p>
+                <p><i>I have deep experience and broad knowledge in my chosen fields. My articles will make your website even more valuable in your readers' eyes.</i></p>
                 <p><i>You can visit my <a href="javascript:void(0);" id="GoToSpiral1">gallery</a> &mdash;
                     it's more of a spiral than a gallery &mdash;
                     to have a glimpse at my articles, ideas and subjects. Being a writer, I am also a poet.
