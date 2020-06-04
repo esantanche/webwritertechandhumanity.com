@@ -49,6 +49,14 @@ module.exports = (map) => `
     </head>
 
     <body>
+    
+        <div id="ItemDialog">
+
+            <i id="CloseDialogButton" class="material-icons">close</i>
+
+            <div id="ContentPane"></div>
+
+        </div>
 
         <div id="HomeMessageView" class="home-message-text standard-font-family-text centred-pane">
             <div class="paper-sheet">
@@ -77,8 +85,6 @@ module.exports = (map) => `
         </div>
 
         <div>
-
-            ${map}
 
             <div id="Carpet">
                 <img class="carpet-image" src="/Carpet.gif">
@@ -110,17 +116,11 @@ module.exports = (map) => `
 
         </div>
 
-        <div id="ItemDialog">
-
-            <i id="CloseDialogButton" class="material-icons">close</i>
-
-            <div id="ContentPane"></div>
-
-        </div>
-
         <div id="BackMask">
 
         </div>
+        
+        ${map}
 
         <div id="ContactMeView">
 
