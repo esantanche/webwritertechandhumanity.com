@@ -104,7 +104,7 @@ p, li {
     overflow-y: auto;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 1024px) {
 
     #ContentPane {
         overflow-y: hidden;
@@ -334,7 +334,7 @@ p, li {
     margin-bottom: 5vh;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 1024px) {
 
     #MenuPane {
         overflow-y: hidden;
@@ -595,7 +595,7 @@ p, li {
     overflow-y: auto;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 1024px) {
 
     .special-page-content-pane {
         overflow-y: hidden;
