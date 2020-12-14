@@ -1,6 +1,8 @@
 # Website for my activity as writer
 
-It's this website: https://webwritertechandhumanity.com/
+I'm not using it, but it's a very interesting experiment sporting a UX that can be useful.
+
+It's this website: http://mvvmedition.webwritertechandhumanity.com/
 
 ## Tech I used
 
